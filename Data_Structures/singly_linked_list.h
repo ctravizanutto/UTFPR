@@ -14,6 +14,7 @@ typedef struct node {
 // Pushes a node to the beginning of the list
 void push_node(node **n, int x) {
     node *tmp = (node*) calloc(1, sizeof(node));
+    if (tmp == NULL) return;
     tmp->next = *n; tmp->x = x;
     *n = tmp;
 }
@@ -21,6 +22,7 @@ void push_node(node **n, int x) {
 // Pushes a node to the end of the list
 void node_add(node **n, int x) {
     node *new_node = (node*) calloc(1, sizeof(node));
+    if (new_node == NULL) return;
     new_node->x = x; new_node->next = NULL;
     if (*n == NULL) *n = new_node;
     else {
