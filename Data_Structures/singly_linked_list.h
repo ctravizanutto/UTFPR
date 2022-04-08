@@ -20,7 +20,7 @@ void push_node(node **n, int x) {
 
 // Pushes a node to the end of the list
 void node_add(node **n, int x) {
-    node *new_node = (node*) calloc(1, sizeof(node));
+    node *new_node = (node*)    calloc(1, sizeof(node));
     new_node->x = x; new_node->next = NULL;
     if (*n == NULL) *n = new_node;
     else {
