@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Defines a simple list that holds int type, declare with calloc
+// Defines a simple list that holds int type, declare with NULL
 typedef struct node {
     int x;
     struct node *next;
