@@ -1,17 +1,17 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-typedef struct produto{
+typedef struct produto {
 char nomeproduto[20];
 float valor;
-}TProduto;
+} TProduto;
 
 typedef struct setor {
-     char nomesetor[10];
-     int qtde; 
-     TProduto *prod;
-}TSetor;
+    char nomesetor[10];
+    int qtde; 
+    TProduto *prod;
+} TSetor;
 
 
 TSetor *aloca_setor(int tam);
@@ -61,7 +61,8 @@ TSetor *aloca_setor(int tam)
     return paux;
 }
 
-void armazena_setor_produto(TSetor *paux, int index) {
+void armazena_setor_produto(TSetor *paux, int index) 
+{
     int qtd;
 
 	printf("Informe o nome do setor %i: ", index);
@@ -75,7 +76,8 @@ void armazena_setor_produto(TSetor *paux, int index) {
     printf("\n");
 }
 
-TProduto *armazena_produto(int qtd, int index){
+TProduto *armazena_produto(int qtd, int index)
+{
 	TProduto *aux = (TProduto*) calloc(qtd, sizeof(TProduto));
 	if (!aux) handle_error();
 
@@ -93,14 +95,16 @@ TProduto *armazena_produto(int qtd, int index){
 	return aux;
 }
 
-TSetor *desaloca_setor(TSetor *p, int tam) {
+TSetor *desaloca_setor(TSetor *p, int tam) 
+{
 	for (int i = 0; i < tam; i++) free((p + i)->prod);
 	free(p);
 
 	return NULL;
 }
 
-void handle_error() {
+void handle_error() 
+{
     printf("Ma alocacao\n");
     exit(EXIT_FAILURE);
 }
