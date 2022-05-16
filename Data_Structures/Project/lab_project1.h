@@ -1,17 +1,27 @@
-/* ------------------------------------------------
+/* ----------------------------------------------
 Cainan Travizanutto && Gabriel Maestre - 2022;
 #ifndef graduated
 #define project_1_data_structures_lab;
 #endif
 
-------------------- QUICK INFOS -------------------
+------------------ QUICK INFO -------------------
 All static functions are meant to be used internally, thus the _prefix format
 If user calls function with wrong parameters the function will only return and don't display any errors
 This is not meant to be used in production, only for study purpose
---------------------- SUMMARY ---------------------
+Functions {
+    create list: returns a struct with a value data
+    insert: takes a list pointer, a int value data, a bool, which if true inserts before a number greater, 
+            else if false after the data provide to localize a node else at the very end;
+    remove: takes a pointer to a list pointer and a bool, which if true removes all nodes, else a specific one
+    print: it prints ¯\_(ツ)_/¯
+    split: takes a list and a value data, remove the prior node connection and returns a new list pointer with the 
+            remaining nodes
+    }
+    
+-------------------- SUMMARY --------------------
 3x structs
 5x simple linked list
-6x header simple linked list
+6x head simple linked list
 7x implementation
 eof license
 */
@@ -43,7 +53,7 @@ typedef struct simple_node {
 // Holds list size and a struct pointer to first element of the list
 typedef struct head_node {
     int size;
-    struct simple_node *next;
+    struct simple_node *first;
 } h_node;
 
 // Holds a data data of int type and two struct pointers, one to the next element in the list and one to the prior
@@ -53,30 +63,34 @@ typedef struct doubly_node {
     struct doubly_node *prev;
 } d_node;
 
-//////////////////// SIMPLE LINKED LIST ////////////////////
-node *node_create_list(int data); // Only takes a data and returns a pointer to the node
-node *node_split_list(node **list, int node_pos_data); // Returns a pointer to a new list, and removes the old list pointer to node
-void node_insert(node *list, int data, bool in_order, ...); // Insert node with data, if in_order true its put at the end or before a greater number,
-// else it takes a pos by node data and inserts afert
+//----------------------------- SIMPLE LINKED LIST -----------------------------
+node *node_create_list(int data);
+node *node_split_list(node **list, int node_pos_data);
+void node_insert(node *list, int data, bool in_order, ...);
 void node_remove(node **list, bool delete_all, ...);
 void node_print_list(node *list);
 
 
-//////////////////// HEADER SIMPLE LINKED LIST ////////////////////
-h_node *h_node_create_list();
-void h_node_insert(node *header, int data, bool in_order, int node_pos_data);
-void h_node_remove(node **header, bool delete_all, int node_pos_data);
-void h_node_print_list(node *header);
-h_node *h_node_split_list(node **header, int node_pos_data);
+//------------------------- head SIMPLE LINKED LIST -------------------------
+h_node *h_node_create_list(int data);
+void h_node_insert(h_node *head, int data, bool in_order, ...);
+void h_node_remove(h_node **head, bool delete_all, ...);
+void h_print_list(h_node *head);
+h_node *h_node_split_list(h_node **head, int node_pos_data);
 
-//////////////////// CIRCULAR LINKED LIST ////////////////////
+//--------------------------- CIRCULAR LINKED LIST ----------------------------
 
-//////////////////// DOUBLY LINKED LIST ////////////////////
+//---------------------------- DOUBLY LINKED LIST -----------------------------
 
-/*
----------------------------------------
-        IMPLEMENTATION
-*/
+
+
+
+
+
+
+
+// ------------------------------ IMPLEMENTATION ------------------------------
+
 node *node_create_list(int data)
 {
     node *tmp = (node*) malloc(sizeof(node));
@@ -105,7 +119,6 @@ static void _node_insert_order(node *list, int data)
     }
     tmp->next = list->next;
     list->next = tmp;
-
 }
 
 static void _node_insert_pos(node *list, int data, int node_pos_data)
@@ -143,7 +156,6 @@ void print_list(node *list)
         printf("%d\n", list->data);
         list = list->next;
     }
-    printf("\n");
 }
 
 static void _node_remove_all(node *list)
@@ -174,7 +186,7 @@ static void _node_remove_pos(node **list, int node_pos_data)
             return;
         }
         tmp = tmp->next;
-    }
+    } 
 }
 
 void node_remove(node **list, bool delete_all, ...)
@@ -210,6 +222,71 @@ node *node_split_list(node **list, int node_pos_data)
 }
 
 
+static int _h_node_list_size(h_node *head)
+{
+    int i = 0;
+    node *list = head->first;
+    while (list != NULL) {
+        i++;
+        list = list->next;
+    }
+    return i;
+}
+
+h_node *h_node_create_list(int data) 
+{
+    h_node *tmp = (h_node*) malloc(sizeof(h_node));
+    if (tmp == NULL) exit(1);
+    tmp->size = 1;
+    tmp->first = node_create_list(data);
+    return tmp;
+}
+
+void h_node_insert(h_node *head, int data, bool in_order, ...)
+{
+    if (in_order) {
+        _node_insert_order(head->first, data);
+        head->size = _h_node_list_size(head);
+        return;
+    }
+    va_list arg;
+    va_start(arg, in_order);
+    int node_pos_data = va_arg(arg, int);
+    _node_insert_pos(head->first, data, node_pos_data);
+    va_end(arg);
+    head->size = _h_node_list_size(head);
+}
+
+void h_node_remove(h_node **head, bool delete_all, ...)
+{
+    if (delete_all) {
+        _node_remove_all((*head)->first);
+        (*head)-> size = _h_node_list_size(*head);
+        return;
+    }
+    va_list arg;
+    va_start(arg, delete_all);
+    int node_pos_data = va_arg(arg, int);
+    _node_remove_pos(&(*head)->first, node_pos_data);
+    va_end(arg);
+    (*head)->size = _h_node_list_size(*head);
+}
+
+void h_print_list(h_node *head)
+{
+    if (head == NULL) return;
+    print_list(head->first);
+    printf("List total size: %i\n", head->size);
+}
+
+h_node *h_node_split_list(h_node **head, int node_pos_data)
+{
+  /*
+  criar outro no cabeça,
+  first recebe o no a ser divido
+  na outra lista remover ponteiro para o no removido
+  */
+}
 
 #endif // _PROJECT1_H
 
