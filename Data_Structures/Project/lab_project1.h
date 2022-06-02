@@ -1,456 +1,90 @@
 /* ----------------------------------------------
 Cainan Travizanutto && Gabriel Maestre - 2022;
-#ifndef graduated
-#define project_1_data_structures_lab;
+#ifndef data_structs_assignment_done
+#define project_1_data_structures_lab
 #endif
 
 ------------------ QUICK INFO -------------------
 This is not meant to be used in production, only for study purpose
 All static functions are meant to be used internally, thus the _prefix format
-If user calls function with wrong parameters the function will only return and don't display any errors
-Functions {
-create list: returns a struct with a value data
-insert: takes a list pointer, a int value data, a bool, which if true inserts before a number greater, 
-        else if false after the data provide to localize a node else at the very end;
+If user calls function with wrong parameters the function will either return and don't display any errors
+        or behave improperly
+Functions { TODO
+create list: 
+insert: 
 remove: takes a pointer to a list pointer and a bool, which if true removes all nodes, else a specific one
 print: it prints ¯\_(ツ)_/¯
-split: takes a list and a value data, remove the prior node connection and returns a new list pointer with the 
-        remaining nodes
+split: 
 }
 
 -------------------- SUMMARY --------------------
-48 structs
-66 simpl linked list
-6x head simple linked list
-7x implementation
-EOF license
+TODO
 */
-
-
 #ifndef _PROJECT1_H
 #define _PROJECT1_H
 
 #ifndef _BOOL
-typedef enum { false, true } bool;
+typedef enum{ false, true } bool;
 #endif
 
-#ifndef _STDIO_H
 #include <stdio.h>
-#endif
-
-#ifndef _STDLIB_H
 #include <stdlib.h>
-#endif
-
 #include <stdarg.h>
 
 // Holds a data data of int type and a struct pointer to the next element in the list
 typedef struct simple_node {
-int data;
-struct simple_node *next;
+        int data;
+        struct simple_node *next;
 } node;
 
 // Holds list size and a struct pointer to first element of the list
 typedef struct head_node {
-int size;
-struct simple_node *first;
+        int size;
+        struct simple_node *first;
 } h_node;
 
 // Holds a data data of int type and two struct pointers, one to the next element in the list and one to the prior
 typedef struct doubly_node {
-int data;
-struct doubly_node *next;
-struct doubly_node *prev;
+        int data;
+        struct doubly_node *next;
+        struct doubly_node *prev;
 } d_node;
 
 //------------------------------ SIMPLE LINKED LIST ------------------------------//
+
 void node_create_list(int data, node** list);
-void node_split_list(node** list_copy_from, node** list_copy_to, int node_pos_data);
+void node_split_list(node** list_split_from, node** list_split_to, int node_pos_data);
 void node_insert(node *list, int data, bool in_order, ...);
 void node_remove(node **list, bool delete_all, ...);
 void node_print_list(node *list);
 
+
 //------------------------- SIMPLE LINKED LIST WITH HEAD -------------------------//
+
 void h_node_create_list(int data, h_node **list);
-void h_node_split_list(h_node** head_copy_from, h_node** head_copy_to, int node_pos_data);
+void h_node_split_list(h_node** head_split_from, h_node** head_split_to, int node_pos_data);
 void h_node_insert(h_node *head, int data, bool in_order, ...);
 void h_node_remove(h_node **head, bool delete_all, ...);
 void h_node_print_list(h_node *head);
 
+
 //----------------------------- CIRCULAR LINKED LIST -----------------------------//
-void c_node_create_list(int data);
-void c_node_split_list(node **list, int node_pos_data);
+
+void c_node_create_list(node **list, int data);
+void c_node_split_list(node **list, int node_post_data);
 void c_node_insert(node *list, int data, bool in_order, ...);
 void c_node_remove(node **list, bool delete_all, ...);
-void d_node_print_list(node *list);
+void c_node_print_list(node* list);
+
 
 //----------------------------- DOUBLY LINKED LIST --------------------------------//
-d_node* d_node_create_list(int data);
-d_node* d_node_split_list(node **list, int node_pos_data);
-void d_node_insert(node *list, int data, bool in_order, ...);
-void d_node_remove(node **list, bool delete_all, ...);
-void d_node_print_list(node *list);
 
+void d_node_create_list(int data, d_node** list);
+void d_node_split_list(d_node** list_split_from, d_node** list_split_to, int node_pos_data);
+void d_node_insert(d_node *list, int data, bool in_order, ...);
+void d_node_remove(d_node **list, bool delete_all, ...);
+void d_node_print_list(d_node *list);
 
-//------------------------------ IMPLEMENTATION ------------------------------//
-
-void node_create_list(int data, node** list)
-{
-    if (*list != NULL) return;
-    node* tmp = (node*) malloc(sizeof(node));
-    if (tmp == NULL) exit(1);
-    tmp->data = data;
-    tmp->next = NULL;
-    *list = tmp;
-    //printf("NODE create: %p\n", *list);
-}
-
-static void _node_insert_order(node* list, int data)
-{
-    if (list == NULL) return;
-    node* tmp = (node*) malloc(sizeof(node));
-    if (tmp == NULL) exit(1);
-
-    while (list->data <= data && list->next != NULL)
-        list = list->next;
-
-    if (list->data >= data) {
-        tmp->data = list->data;
-        tmp->next = list->next;
-        list->data = data;
-        list->next = tmp;
-        return;
-    }
-    tmp->data = data;
-    tmp->next = list->next;
-    list->next = tmp;
-}
-
-static void _node_insert_pos(node* list, int data, int node_pos_data)
-{
-    if (list == NULL) return;
-    while (list->data != node_pos_data) {
-        if (list->next == NULL) return;
-        list = list->next;
-    }
-    node* tmp = (node*) malloc(sizeof(node));
-    if (tmp == NULL) exit(1);
-    tmp->data = data;
-    tmp->next = list->next;
-    list->next = tmp;
-}
-
-void node_insert(node* list, int data, bool in_order, ...)
-{
-    if (in_order) {
-        _node_insert_order(list, data);
-        return;
-    }
-    va_list arg;
-    va_start(arg, in_order);
-    int node_pos_data = va_arg(arg, int);
-    _node_insert_pos(list, data, node_pos_data);
-    va_end(arg);
-}
-
-void node_print_list(node* list)
-{
-    if (list == NULL) return;
-    while (list != NULL)
-    {
-        printf("%d\n", list->data);
-        list = list->next;
-    }
-}
-
-static void _node_remove_all(node* list)
-{
-    if (list == NULL) return;
-
-    _node_remove_all(list->next);
-    list->next = NULL;
-    free(list);
-}
-
-static void _node_remove_pos(node** list, int node_pos_data) 
-{
-    if (*list == NULL) return;
-    node* tmp = *list;
-    if (tmp->data == node_pos_data) { // case the node to remove its the first on list
-            *list = tmp->next;
-            free(tmp);
-            return;
-    }
-
-    while (tmp->next != NULL) {
-        if (tmp->next->data == node_pos_data) {
-            node* tmp_remove = tmp->next;
-            tmp->next = tmp->next->next;
-            free(tmp_remove);
-            return;
-        }
-        tmp = tmp->next;
-    } 
-}
-
-void node_remove(node** list, bool delete_all, ...)
-{
-    if (*list == NULL) return;
-    if (delete_all) {
-        _node_remove_all(*list);
-        *list = NULL;
-        return;
-    }
-    va_list arg;
-    va_start(arg, delete_all);
-    int node_pos_data = va_arg(arg, int);
-    _node_remove_pos(list, node_pos_data);
-    va_end(arg);
-}
-
-void node_split_list(node** list_copy_from, node** list_copy_to, int node_pos_data)
-{
-    if (*list_copy_to != NULL) return;
-    if (*list_copy_from == NULL) return;
-    node* tmp = *list_copy_from;
-    if (tmp->data == node_pos_data) { // case pos is the first element
-        *list_copy_to = *list_copy_from;
-        *list_copy_from = NULL;
-        return;
-    }
-    node *tmp_return = NULL;
-    do {
-        if (tmp->next == NULL) return;
-        if (tmp->next->data == node_pos_data) {
-            tmp_return = tmp->next;
-            tmp->next = NULL;
-        }
-        tmp = tmp->next;
-    } while (tmp != NULL);
-    *list_copy_to = tmp_return;
-}
-
-static int _h_node_list_size(h_node* head)
-{
-    int i = 0;
-    node* list = head->first;
-    while (list != NULL) {
-        i++;
-        list = list->next;
-    }
-    return i;
-}
-
-void h_node_create_list(int data, h_node** list) 
-{
-    if (*list != NULL) return;
-    h_node* tmp = (h_node*) malloc(sizeof(h_node));
-    if (tmp == NULL) exit(1);
-    *list = tmp;
-    node_create_list(data, &(tmp->first));
-}
-
-void h_node_insert(h_node* head, int data, bool in_order, ...)
-{
-    if (in_order) {
-        _node_insert_order(head->first, data);
-        return;
-    }
-    va_list arg;
-    va_start(arg, in_order);
-    int node_pos_data = va_arg(arg, int);
-    _node_insert_pos(head->first, data, node_pos_data);
-    va_end(arg);
-}
-
-void h_node_remove(h_node** head, bool delete_all, ...)
-{
-    if(*head == NULL) return;
-    if (delete_all) {
-        _node_remove_all((*head)->first);
-        free(*head);
-        *head = NULL;
-        return;
-    }
-    va_list arg;
-    va_start(arg, delete_all);
-    int node_pos_data = va_arg(arg, int);
-    _node_remove_pos(&(*head)->first, node_pos_data);
-    va_end(arg);
-}
-
-void h_node_print_list(h_node* head)
-{
-    if (head == NULL) return;
-    node_print_list(head->first);
-    printf("List total size: %i\n", _h_node_list_size(head));
-}
-
-void h_node_split_list(h_node** head_copy_from, h_node** head_copy_to, int node_pos_data)
-{
-    if (*head_copy_to != NULL) return;
-    if (*head_copy_from == NULL) return;
-    
-    node* tmp = (*head_copy_from)->first;
-    
-    if(tmp->data == node_pos_data) {
-        *head_copy_to = *head_copy_from;
-        *head_copy_from = NULL;
-        return;
-    }
-    node* tmp_return = NULL;
-    do {
-        if (tmp->next == NULL) return;
-        if (tmp->next->data == node_pos_data) {
-            tmp_return = tmp->next;
-            tmp->next = NULL;
-        }
-        tmp = tmp->next;
-    } while (tmp != NULL);
-    *head_copy_to = (h_node*)malloc(sizeof(h_node));
-    (*head_copy_to)->first = tmp_return;
-}
-
-void c_node_create_list(int data){}
-void c_node_split_list(node** list, int node_pos_data){}
-void c_node_insert(node* list, int data, bool in_order, ...){}
-void c_node_remove(node** list, bool delete_all, ...){}
-void d_node_print_list(node* list){}
-
-void d_node_create_list(int data, d_node** list)
-{
-    if (*list != NULL) return;
-    d_node* tmp = (d_node*) malloc(sizeof(d_node));
-    if (tmp == NULL) exit(1);
-    tmp->data = data;
-    tmp->next = NULL;
-    tmp->prev = NULL;
-    *list = tmp;
-} 
-
-static void _d_node_insert_order(d_node* list, int data)
-{
-    if (list == NULL) return;
-    d_node* tmp = (d_node*) malloc(sizeof(d_node));
-    if (tmp == NULL) exit(1);
-
-    while (list->data <= data && list->next != NULL)
-        list = list->next;
-
-    if (list->data >= data) {
-        tmp->data = list->data;
-        tmp->next = list->next;
-        tmp->prev = list;
-        list->data = data;
-        list->next = tmp;
-        return;
-    }
-    tmp->data = data;
-    tmp->next = list->next;
-    tmp->prev = list;
-    list->next = tmp;
-}
-
-static void _d_node_insert_pos(d_node* list, int data, int node_pos_data)
-{
-    if (list == NULL) return;
-    while (list->data != node_pos_data) {
-        if (list->next == NULL) return;
-        list = list->next;
-    }
-    d_node* tmp = (d_node*) malloc(sizeof(d_node));
-    if (tmp == NULL) exit(1);
-    tmp->data = data;
-    tmp->next = list->next;
-    tmp->prev = list;
-    list->next = tmp;
-    if(tmp->next != NULL) 
-        tmp->next->prev = tmp;
-}
-
-void d_node_insert(d_node *list, int data, bool in_order, ...)
-{
-    if (in_order) {
-        _d_node_insert_order(list, data);
-        return;
-    }
-    va_list arg;
-    va_start(arg, in_order);
-    int node_pos_data = va_arg(arg, int);
-    _d_node_insert_pos(list, data, node_pos_data);
-    va_end(arg);
-}
-
-static void _d_node_remove_pos(d_node** list, int node_pos_data)
-{
-    if (*list == NULL) return;
-    d_node* tmp = *list;
-    if (tmp->data == node_pos_data) { // case the node to remove its the first on list
-            *list = tmp->next;
-            (*list)->prev = NULL;
-            free(tmp);
-            return;
-    }
-
-    while (tmp->next != NULL) {
-        if (tmp->next->data == node_pos_data) {
-            d_node* tmp_remove = tmp->next;
-            tmp->next = tmp->next->next;
-            tmp->next->prev = tmp;
-            free(tmp_remove);
-            return;
-        }
-        tmp = tmp->next;
-    } 
-}
-
-void d_node_remove(d_node **list, bool delete_all, ...)
-{
-    if(*list == NULL) return;
-    if (delete_all) {
-        _node_remove_all((node*) *list);
-        *list = NULL;
-        return;
-    }
-    va_list arg;
-    va_start(arg, delete_all);
-    int node_pos_data = va_arg(arg, int);
-    _d_node_remove_pos(list, node_pos_data);
-    va_end(arg);
-}
-
-void d_node_print_list(d_node *list)
-{
-    if (list == NULL) return;
-    while (list != NULL)
-    {
-        printf("%d\n", list->data);
-        list = list->next;
-    }
-}
-
-void d_node_split_list(d_node** list_split_from, d_node** list_split_to, int node_pos_data)
-{
-    if (*list_split_to != NULL) return;
-    if (*list_split_from == NULL) return;
-    d_node* tmp = *list_split_from;
-    if (tmp->data == node_pos_data) { // case pos is the first element
-        *list_split_to = *list_split_from;
-        *list_split_from = NULL;
-        return;
-    }
-    d_node *tmp_return = NULL;
-    do {
-        if (tmp->next == NULL) return;
-        if (tmp->next->data == node_pos_data) {
-            tmp_return = tmp->next;
-            tmp->next = NULL;
-        }
-        tmp = tmp->next;
-    } while (tmp != NULL);
-    *list_split_to = tmp_return;
-    (*list_split_to)->prev = NULL;
-}
 
 #endif // _PROJECT1_H
 
