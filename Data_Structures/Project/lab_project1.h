@@ -43,13 +43,13 @@ print: it prints ¯\_(ツ)_/¯
     521-571 Insert Doubly List
     573-609 Remove Doubly List
     611-619 Print Doubly List
-624  -> License
+624 -> License
+
+
+
+
+
 */
-
-
-
-
-
 #ifndef _PROJECT1_H
 #define _PROJECT1_H
 
@@ -84,26 +84,26 @@ typedef struct doubly_node {
 
 void node_create_list(int data, node** list);
 void node_split_list(node** list_split_from, node** list_split_to, int node_pos_data);
-void node_insert(node* list, int data, bool in_order, ...);
+void node_insert(node *list, int data, bool in_order, ...);
 void node_remove(node **list, bool delete_all, ...);
 void node_print_list(node *list);
 
 
 //------------------------- SIMPLE LINKED LIST WITH HEAD -------------------------//
 
-void h_node_create_list(int data, h_node** list);
+void h_node_create_list(int data, h_node **list);
 void h_node_split_list(h_node** head_split_from, h_node** head_split_to, int node_pos_data);
-void h_node_insert(h_node* head, int data, bool in_order, ...);
-void h_node_remove(h_node** head, bool delete_all, ...);
-void h_node_print_list(h_node* head);
+void h_node_insert(h_node *head, int data, bool in_order, ...);
+void h_node_remove(h_node **head, bool delete_all, ...);
+void h_node_print_list(h_node *head);
 
 
 //----------------------------- CIRCULAR LINKED LIST -----------------------------//
 
-void c_node_create_list(node** list, int data);
+void c_node_create_list(node **list, int data);
 void c_node_split_list(node** list_split_from, node** list_split_to, int node_pos_data);
-void c_node_insert(node* list, int data, bool in_order, ...);
-void c_node_remove(node** list, bool delete_all, ...);
+void c_node_insert(node *list, int data, bool in_order, ...);
+void c_node_remove(node **list, bool delete_all, ...);
 void c_node_print_list(node* list);
 
 
@@ -111,9 +111,9 @@ void c_node_print_list(node* list);
 
 void d_node_create_list(int data, d_node** list);
 void d_node_split_list(d_node** list_split_from, d_node** list_split_to, int node_pos_data);
-void d_node_insert(d_node* list, int data, bool in_order, ...);
-void d_node_remove(d_node** list, bool delete_all, ...);
-void d_node_print_list(d_node* list);
+void d_node_insert(d_node *list, int data, bool in_order, ...);
+void d_node_remove(d_node **list, bool delete_all, ...);
+void d_node_print_list(d_node *list);
 
 //------------------------------ IMPLEMENTATION ------------------------------//
 
@@ -154,7 +154,9 @@ static void _node_insert_order(node* list, int data)
     node* tmp = (node*) malloc(sizeof(node));
     if (tmp == NULL) exit(1);
 
-        //free(*list); this line is'n necessary in this function because the "free all" isn't recursive. 
+    while (list->data <= data && list->next != NULL)
+        list = list->next;
+
     if (list->data >= data) {
         tmp->data = list->data;
         tmp->next = list->next;
@@ -196,7 +198,9 @@ void node_insert(node* list, int data, bool in_order, ...)
 
 static void _node_remove_all(node* list)
 {
-        //free(*list); this line is'n necessary in this function because the "free all" isn't recursive. ->next);
+    if (list == NULL) return;
+
+    _node_remove_all(list->next);
     list->next = NULL;
     free(list);
 }
@@ -328,7 +332,7 @@ void h_node_print_list(h_node* head)
     printf("List total size: %i\n", _h_node_list_size(head));
 }
 
-void c_node_create_list(node** list, int data)
+void c_node_create_list(node **list, int data)
 {
     if (*list != NULL) return;
     node* tmp = (node*) malloc(sizeof(node));
@@ -339,7 +343,10 @@ void c_node_create_list(node** list, int data)
     tmp->next = *list;
 }
 
-void c_node_split_list(node** list_split_from, node** list_spl 
+void c_node_split_list(node** list_split_from, node** list_split_to, int node_pos_data)
+{
+    node* tmp_list_from = *list_split_from;
+
     if (*list_split_to != NULL) return;
     if (*list_split_from == NULL) return;
     node* tmp = *list_split_from;
@@ -387,7 +394,7 @@ static void _c_node_insert_order(node* list, int data)
     list->next = tmp;
 }
 
-static void _c_node_insert_pos(node* list, int data, int node_pos_data)
+static void _c_node_insert_pos(node *list, int data, int node_pos_data)
 {
     node *tmp2 = list;
     while (list->data != node_pos_data) {
@@ -455,6 +462,7 @@ void c_node_remove(node** list, bool delete_all, ...)
     if(*list == NULL) return;
     if (delete_all) {
         _c_node_remove_all(*list);
+        //free(*list); this line is'n necessary in this function because the "free all" isn't recursive. 
         *list = NULL;
         return;
     }
