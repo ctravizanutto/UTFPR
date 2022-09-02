@@ -1,3 +1,5 @@
+# MIPS32 ASM LANGUAGE
+# Cainan Travizanutto - 2022/2
 .data:
 	A: .word 1, 1, 2, 3, 4, 5, 6, 7, 8, 9
 	A_size: .word 10
@@ -33,7 +35,7 @@ _main:
 	li $v0, 10		# exits
 	syscall
 	
-_sum:
+_sum:				# sum all elements of A vector
 	li $v0, 0
 	lw $t0, A_size 
 	
@@ -47,7 +49,7 @@ _sum:
 	la $s0, A
 	jr $ra
 		
-_sub:
+_sub:					# diff all elements of A vector
 	addi $v0, $zero, 0
 	lw $t0, A_size 
 	
@@ -61,7 +63,7 @@ _sub:
 	la $s0, A
 	jr $ra
 	
-_mul:
+_mul:					# mult all elements of A vector
 	addi $v0, $zero, 1
 	lw $t0, A_size 
 	
