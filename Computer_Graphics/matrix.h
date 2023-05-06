@@ -2,7 +2,6 @@
 #define MATRIX_H
 
 #include <array>
-#include <QPointF>
 #include <iostream>
 
 template <int Rows, int Cols>

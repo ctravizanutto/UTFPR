@@ -38,13 +38,13 @@ void my_frame::paintEvent(QPaintEvent *event)
 
 void my_frame::rect_rot_r()
 {
-    displayFile[0]->rotate(1);
+    displayFile[0]->rotate(3.14 / 3);
     update();
 }
 
 void my_frame::rect_rot_l()
 {
-    displayFile[0]->rotate(-1);
+    displayFile[0]->rotate(-3.14 / 3);
     update();
 }
 
@@ -56,7 +56,7 @@ void my_frame::rect_inc()
 
 void my_frame::rect_dec()
 {
-    displayFile[0]->rescale(0.9, 0.9);
+    displayFile[0]->rescale(0.5, 0.5);
     update();
 }
 

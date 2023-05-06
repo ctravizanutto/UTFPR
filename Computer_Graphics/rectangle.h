@@ -6,6 +6,7 @@
 class Rectangle : public GenericObject
 {
     std::array<Matrix<3, 1>, 4> coords;
+    double dx, dy;
 
 public:
     Rectangle(const std::string& name, const std::array<Matrix<3, 1>, 4>& points);

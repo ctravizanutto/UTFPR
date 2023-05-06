@@ -3,9 +3,10 @@
 #include <iostream>
 
 Rectangle::Rectangle(const std::string& name, const std::array<Matrix<3, 1>, 4>& points)
-    : GenericObject(name),
-      coords(points)
-{}
+    : GenericObject(name), coords(points)
+{
+    dx = coords[0](0, 0), dy = coords[0](0, 1);
+}
 
 void Rectangle::draw(QPainter *painter) {
     painter->setPen(QPen(Qt::red, 2));
@@ -22,13 +23,12 @@ std::string Rectangle::get_type() {
 
 void Rectangle::rotate(double o)
 {
-    Matrix<3, 3> mat = {cos(o), -1.0 * sin(o), 0.0,
-                        sin(o), cos(o), 0.0,
+    Matrix<3, 3> mat = {cos(o), -sin(o), dx - cos(o) * dx + sin(o) * dy,
+                        sin(o), cos(o), dy - sin(o) * dx - cos(o) * dy,
                         0.0, 0.0, 1.0};
-
+    mat.printMatrix();
     for (auto& point: coords) {
-        auto point3x3 = point.to_3x3();
-        point = (point3x3 * mat * point3x3.negate()) * point;
+        point = mat * point;
     }
 }
 
@@ -45,14 +45,12 @@ void Rectangle::translation(double dx, double dy)
 
 void Rectangle::rescale(double sx, double sy)
 {
-    Matrix<3, 3> mat = {sx,  0.0, 0.0,
-                        0.0, sy,  0.0,
+    Matrix<3, 3> mat = {sx,  0.0, dx * (1 - sx),
+                        0.0, sy,  dy * (1 - sy),
                         0.0, 0.0, 1.0};
 
     for (auto& point: coords) {
-        auto tmp = mat * point.to_3x3();
-        tmp = tmp * point.to_3x3().negate();
-        point = tmp * point;
+        point = mat * point;
     }
 }
 
