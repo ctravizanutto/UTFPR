@@ -3,10 +3,13 @@
 
 #include <array>
 #include <iostream>
+#include <QPoint>
 
 template <int Rows, int Cols>
 class Matrix
 {
+    std::array<std::array<double, Cols>, Rows> data;
+
 public:
     template <typename... Args>
     Matrix(Args... args) : data{ { args... } } {}
@@ -49,21 +52,6 @@ public:
         return result;
     }
 
-    Matrix<3, 3> negate() {
-        Matrix<3, 3> result;
-        result = (*this);
-        result(0, 2) = -(*this)(0, 2);
-        result(1, 2) = -(*this)(1, 2);
-
-        return result;
-    }
-
-    Matrix<3, 3> to_3x3() {
-        return {1.0, 0.0, (*this)(0, 0),
-                0.0, 1.0, (*this)(1, 0),
-                0.0, 0.0, 1};
-    }
-
     QPointF get_coords() {
         QPointF point(data[0][0], data[1][0]);
         return point;
@@ -77,9 +65,6 @@ public:
             std::cout << "\n";
         }
     }
-
-private:
-    std::array<std::array<double, Cols>, Rows> data;
 };
 
 #endif // MATRIX_H

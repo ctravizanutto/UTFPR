@@ -11,17 +11,17 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    my_frame.cpp \
+    myframe.cpp \
     rectangle.cpp \
-    triangle.cpp
+    viewport.cpp
 
 HEADERS += \
     genericobject.h \
     mainwindow.h \
-    my_frame.h \
+    myframe.h \
     rectangle.h \
-    triangle.h \
-    matrix.h
+    matrix.h \
+    viewport.h
 
 FORMS += \
     mainwindow.ui

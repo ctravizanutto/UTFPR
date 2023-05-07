@@ -1,5 +1,5 @@
-#ifndef MY_FRAME_H
-#define MY_FRAME_H
+#ifndef MYFRAME_H
+#define MYFRAME_H
 
 #include <QFrame>
 #include <QWidget>
@@ -7,23 +7,21 @@
 #include <QPainter>
 #include <vector>
 
-#include <genericobject.h>
-#include <rectangle.h>
-#include <triangle.h>
-#include <array>
-#include <matrix.h>
+#include "genericobject.h"
+#include "rectangle.h"
+#include "viewport.h"
 
-
-class my_frame : public QFrame
+class MyFrame : public QFrame
 {
-    Q_OBJECT
+    std::vector<GenericObject*> displayFile;
 
 public:
-    explicit my_frame(QWidget *parent = nullptr);
-    ~my_frame();
+    explicit MyFrame(QWidget *parent = nullptr);
+    ~MyFrame();
     void paintEvent(QPaintEvent *event) override;
 
-    std::vector<GenericObject*> displayFile;
+private:
+    Q_OBJECT
 
 public slots:
     void rect_rot_r();
@@ -39,4 +37,4 @@ signals:
 
 };
 
-#endif // MY_FRAME_H
+#endif // MYFRAME_H

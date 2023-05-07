@@ -4,26 +4,28 @@
 #include <string>
 #include <typeinfo>
 #include <QPainter>
-#include <QPen>
-#include <QPointF>
-#include <matrix.h>
-#include <cmath>
+#include "matrix.h"
+
+constexpr double PI = 3.14159265358979323846;
+
+enum class CoordType: char {
+    world,
+    window
+};
 
 class GenericObject
 {
-    std::string name;
-    std::string type;
+protected:
+    std::string* name;
 
 public:
-    GenericObject(const std::string& name) { this->name = name; }
-    virtual ~GenericObject() {}
+    virtual ~GenericObject() { delete name; }
     virtual void draw(QPainter*) {}
-    std::string get_name() { return this->name; }
-    virtual std::string get_type() { return typeid(this).name(); }
-    virtual void rotate(double) {}
-    virtual void translation(double, double) {}
-    virtual void rescale(double, double) {}
+    virtual void transform(Matrix<3, 3>&, CoordType) {}
+    virtual void clip() {}
 
+    std::string get_type() { return typeid(this).name(); }
+    std::string get_name() { return *name; }
 };
 
 #endif // GENERICOBJECT_H

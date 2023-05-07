@@ -1,27 +1,42 @@
 #include "rectangle.h"
 
-#include <iostream>
-
-Rectangle::Rectangle(const std::string& name, const std::array<Matrix<3, 1>, 4>& points)
-    : GenericObject(name), coords(points)
+Rectangle::Rectangle(const char* name, const std::array<Matrix<3, 1>, 4>& points) : world_coords(points)
 {
-    dx = coords[0](0, 0), dy = coords[0](0, 1);
+    dx = world_coords[0](0, 0), dy = world_coords[0](0, 1);
+    if (name)
+        this->name = new std::string(name);
+    else
+        this->name = nullptr;
 }
 
 void Rectangle::draw(QPainter *painter) {
-    painter->setPen(QPen(Qt::red, 2));
+    painter->setPen(QPen(Qt::black, 2));
 
-    painter->drawLine(coords[0].get_coords(), coords[1].get_coords());
-    painter->drawLine(coords[0].get_coords(), coords[2].get_coords());
-    painter->drawLine(coords[1].get_coords(), coords[3].get_coords());
-    painter->drawLine(coords[2].get_coords(), coords[3].get_coords());
+
+
 }
 
-std::string Rectangle::get_type() {
-    return "Rectangle";
+void Rectangle::transform(Matrix<3, 3> &t, CoordType coord_type)
+{
+    switch (coord_type) {
+    case CoordType::world:
+        for (auto& point: world_coords) {
+            point = t * point;
+        }
+        break;
+    case CoordType::window:
+        break;
+    default:
+        break;
+   }
 }
 
-void Rectangle::rotate(double o)
+void Rectangle::clip()
+{
+    // TODO
+}
+
+/*void Rectangle::rotate(double o)
 {
     Matrix<3, 3> mat = {cos(o), -sin(o), dx - cos(o) * dx + sin(o) * dy,
                         sin(o), cos(o), dy - sin(o) * dx - cos(o) * dy,
@@ -54,5 +69,5 @@ void Rectangle::rescale(double sx, double sy)
         point = mat * point;
     }
 }
-
+*/
 
