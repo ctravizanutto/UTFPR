@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+constexpr double PI = 3.14159265358979323846;
+
+
 my_frame::my_frame(QWidget *parent)
     : QFrame{parent}
 {  
@@ -38,13 +41,13 @@ void my_frame::paintEvent(QPaintEvent *event)
 
 void my_frame::rect_rot_r()
 {
-    displayFile[0]->rotate(3.14 / 3);
+    displayFile[0]->rotate(PI / 3);
     update();
 }
 
 void my_frame::rect_rot_l()
 {
-    displayFile[0]->rotate(-3.14 / 3);
+    displayFile[0]->rotate(-PI / 3);
     update();
 }
 
@@ -62,24 +65,24 @@ void my_frame::rect_dec()
 
 void my_frame::rect_up()
 {
-    displayFile[0]->translation(0.0, -1);
+    displayFile[0]->translation(0.0, -1.0);
     update();
 }
 
 void my_frame::rect_down()
 {
-    displayFile[0]->translation(0.0, 1);
+    displayFile[0]->translation(0.0, 1.0);
     update();
 }
 
 void my_frame::rect_left()
 {
-    displayFile[0]->translation(-1, 0.0);
+    displayFile[0]->translation(-1.0, 0.0);
     update();
 }
 
 void my_frame::rect_right()
 {
-    displayFile[0]->translation(1, 0.0);
+    displayFile[0]->translation(1.0, 0.0);
     update();
 }

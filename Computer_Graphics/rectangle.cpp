@@ -26,7 +26,7 @@ void Rectangle::rotate(double o)
     Matrix<3, 3> mat = {cos(o), -sin(o), dx - cos(o) * dx + sin(o) * dy,
                         sin(o), cos(o), dy - sin(o) * dx - cos(o) * dy,
                         0.0, 0.0, 1.0};
-    mat.printMatrix();
+
     for (auto& point: coords) {
         point = mat * point;
     }
@@ -41,6 +41,7 @@ void Rectangle::translation(double dx, double dy)
     for (auto& point: coords) {
         point = mat * point;
     }
+    this->dx = coords[0](0, 0), this->dy = coords[0](0, 1);
 }
 
 void Rectangle::rescale(double sx, double sy)

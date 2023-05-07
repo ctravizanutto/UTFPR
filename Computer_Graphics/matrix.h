@@ -8,10 +8,8 @@ template <int Rows, int Cols>
 class Matrix
 {
 public:
-    Matrix(): data{}{}
-
     template <typename... Args>
-        Matrix(Args... args) : data{ { args... } } {}
+    Matrix(Args... args) : data{ { args... } } {}
 
     double& operator()(int row, int col) {
         return data[row][col];
