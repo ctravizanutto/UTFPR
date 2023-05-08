@@ -2,11 +2,11 @@
 
 ViewPort::ViewPort(const std::array<Matrix<3, 1>, 4>& points) : points(points)
 {
-    this->name = new std::string("viewport");
+    this->name = std::make_unique<std::string>("viewport");
 }
 
 void ViewPort::draw(QPainter *painter) {
-    painter->setPen(QPen(Qt::black, 2));
+    painter->setPen(QPen(Qt::black, 1.5));
 
     painter->drawLine(points[0].get_coords(), points[1].get_coords());
     painter->drawLine(points[0].get_coords(), points[2].get_coords());

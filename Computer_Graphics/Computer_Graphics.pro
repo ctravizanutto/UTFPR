@@ -13,7 +13,8 @@ SOURCES += \
     mainwindow.cpp \
     myframe.cpp \
     rectangle.cpp \
-    viewport.cpp
+    viewport.cpp \
+    window.cpp
 
 HEADERS += \
     genericobject.h \
@@ -21,7 +22,8 @@ HEADERS += \
     myframe.h \
     rectangle.h \
     matrix.h \
-    viewport.h
+    viewport.h \
+    window.h
 
 FORMS += \
     mainwindow.ui

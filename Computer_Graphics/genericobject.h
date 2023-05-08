@@ -16,10 +16,10 @@ enum class CoordType: char {
 class GenericObject
 {
 protected:
-    std::string* name;
+    std::unique_ptr<std::string> name = nullptr;
 
 public:
-    virtual ~GenericObject() { delete name; }
+    // interface functions
     virtual void draw(QPainter*) {}
     virtual void transform(Matrix<3, 3>&, CoordType) {}
     virtual void clip() {}
