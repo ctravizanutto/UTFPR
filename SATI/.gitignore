@@ -1,0 +1,4 @@
+venv
+# remove sheets and final file for students privacy :)
+*.xlsx
+usuarios.txt
