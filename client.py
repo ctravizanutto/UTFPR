@@ -1,8 +1,8 @@
 import socket
 import pickle
+from misc import server_address
 
 if __name__ == "__main__":
-    server_address = ('localhost', 8080)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
         try:

@@ -1,5 +1,7 @@
 import ipaddress
 
+server_address = ('localhost', 8080)
+
 def calculate_subnet_range(hosts_count, ip):
     mask = 32 - (host_bits := hosts_count.bit_length())
 

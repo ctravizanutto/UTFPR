@@ -1,9 +1,8 @@
 import socket
 import pickle
-from calculations import networks
+from misc import networks, server_address
 
 if __name__ == "__main__":
-    server_address = ('localhost', 8080)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         server_socket.bind(server_address)
