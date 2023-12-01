@@ -1,4 +1,5 @@
 import socket
+import pickle
 from calculations import networks
 
 if __name__ == "__main__":
@@ -9,7 +10,6 @@ if __name__ == "__main__":
         server_socket.listen(1)
         print(f"[INFO] Listening on {server_address[0]}:{server_address[1]}")
         
-
         while True:
             client_socket, client_address = server_socket.accept()
             print(f"[INFO] Accepted connection from {client_address[0]}:{client_address[1]}")
@@ -18,7 +18,7 @@ if __name__ == "__main__":
                 data = client_socket.recv(1024)
 
                 response = networks(data)
-                client_socket.sendall(response.encode())
+                client_socket.sendall(pickle.dumps(response))
             except Exception as e:
                 print(f"[ERROR] {e}")
             finally:

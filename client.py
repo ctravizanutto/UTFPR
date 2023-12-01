@@ -1,5 +1,5 @@
 import socket
-
+import pickle
 
 if __name__ == "__main__":
     server_address = ('localhost', 8080)
@@ -13,8 +13,9 @@ if __name__ == "__main__":
             buf = input()
             client_socket.sendall(buf.encode())
 
-            data = client_socket.recv(1024)
-
+            response = pickle.loads(client_socket.recv(1024))
+            for net_size, ip in response:
+                print(f"{net_size}:", ip)
         except Exception as e:
             print(f"[ERROR] {e}")
 
